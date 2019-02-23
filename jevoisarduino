@@ -52,7 +52,7 @@ void loop()
   instr[len] = 0;
   digitalWrite(LEDPIN, HIGH);
   char * tok = strtok(instr, " \r\n");
-  int state = 0; int targx = 0, targy = 0;
+  int state = 0; int targx = 999, targy = 0;
   while (tok)
   {
     // State machine:
@@ -101,8 +101,13 @@ void loop()
     if (tiltval < 5 * SCALE) tiltval = 5 * SCALE; else if (tiltval > 175 * SCALE) tiltval = 175 * SCALE;
     tiltservo.write(tiltval / SCALE);
   }
+  //Print out the x from center
   Serial.println(targx);
-  digitalWrite(digitalPin, targx/4);
-  analogWrite(roborioPin, targx/4);
+  if (targx == 999){
+      digitalWrite(digitalPin, LOW);
+  }else {
+    digitalWrite(digitalPin, HIGH);
+    analogWrite(roborioPin, targx/4);
+  }
 
 }
